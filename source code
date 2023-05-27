@@ -13,11 +13,19 @@ THRESHOLDS = [12, 1]
 URL = "https://arcg.is/0fHmTX"
 URL_MOBILE = "https://arcg.is/1DPOWm0"
 
+print("US")
+
+print("sweden")
+
 def sms_alert(message):
     #print(message)
     client = Client(os.environ.get("TWILIO_SID"), os.environ.get("TWILIO_TOKEN"))
     client.messages.create(body = message, from_ =os.environ.get("TWILIO_NUMBER"),to = os.environ.get("PHONE_NUMBER"))
     time.sleep(2)
+    print("PHONE NUMBER")
+    print("message")
+    print("TWILIO_NUMBER")
+    
 
 
 def footer_message(ts):
@@ -25,7 +33,8 @@ def footer_message(ts):
 
 
 def test_alert():
-    countries_confirmed, ts = scrape_confirmed_countries()
+    countries_confirmed, 
+    ts = scrape_confirmed_countries()
     message = "{} has {} cases.\n{}".format(list(countries_confirmed.keys())[0], list(countries_confirmed.values())[0],footer_message(ts))
     #print(message)
     sms_alert(message)
@@ -37,12 +46,15 @@ def confirmed_data(driver):
 
     for confirmed in confirmed_cases_results:
         countries = confirmed.find_elements_by_class_name("external-html")
+        #elements are confirmed by classes
 
         for country in countries:
             country_attr = country.text.split(" ", 1)
             countries_confirmed[country_attr[1]] = int(country_attr[0].replace(",", ""))
+            #attributes are to be confirmed
 
     return countries_confirmed
+    #threshold values are to be conformed
 
 
 def ts_data(driver):
@@ -56,6 +68,8 @@ def scrape_confirmed_countries():
     driver = webdriver.Chrome()
     driver.get(URL)
     time.sleep(5)
+    #countries webdriver has to be defined
+    
     # Call Helper functions to scrape data
     countries_confirmed =confirmed_data(driver)
     ts = ts_data(driver)
@@ -66,10 +80,14 @@ def scrape_confirmed_countries():
 def get_alert_message(country, confirmed, ts):
     footer = footer_message(ts)
     return "Alert Triggered!\n{} has {} confirmed cases.\n{}".format(country, confirmed, footer)
+    Print("country")
+    Print("confirmed factor)
+    #message are given by alerts
 
 
 def check_status():    
     countries_confirmed, ts = scrape_confirmed_countries()
+    #countries has to represented by threshold values 
 
     for country, threshold in zip(COUNTRIES, THRESHOLDS):
 
@@ -79,7 +97,9 @@ def check_status():
 
         else:
             print("{} didn't trigger an alert.".format(country))
-
+            
+            #countries are divided by threshold values
+            print("country")
 
 if __name__ == '__main__':
     check_status()
